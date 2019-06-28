@@ -5,8 +5,8 @@ module.exports = Slack;
 
 if (!global.R5) {
   global.R5 = {
-    out: new (require('./Output.js'))('slack')
-  };
+    out: console
+  }
 }
 
 let request = require('request');
@@ -25,7 +25,7 @@ function Slack (channel = 'alerts') {
 Slack.prototype = {
   send_message: function (text, callback) {
     post_request(this, text, function (err, res, body) {
-      if (err) { R5.out.err(err); }
+      if (err) { R5.out.error(err); }
       if (callback) { return callback(err); }
     });
   }
