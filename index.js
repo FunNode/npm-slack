@@ -10,12 +10,11 @@ if (!global.R5) {
 }
 
 let request = require('request');
-let config = {
-  live: process.env.NODE_ENV === 'production'
-};
 
-function Slack (channel = 'alerts') {
+function Slack (token, channel, live = false) {
   this.channel = channel;
+  this.token = token;
+  this.live = live;
   this.host = require('os').hostname();
   this.process = process.title;
 }
@@ -43,11 +42,11 @@ function post_request (slack, text, callback) {
     form: {
       channel: slack.channel,
       text: text,
-      username: `${config.live ? 'prod' : 'dev'}-${slack.host}`
+      username: `${this.live ? 'prod' : 'dev'}-${slack.host}`
     }
   };
 
-  if (!config.live) {
+  if (!this.live) {
     R5.out.log(`Slack message not sent (on DEV): ${text}`);
     return callback(false, {}, {});
   }
