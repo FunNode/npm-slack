@@ -10,14 +10,11 @@ if (!global.R5) {
 }
 
 let request = require('request');
-let config = {
-  live: process.env.NODE_ENV === 'production'
-};
 
-function Slack (channel = 'alerts') {
+function Slack (channel, token, bot_name, live = false) {
   this.channel = channel;
-  this.host = require('os').hostname();
-  this.process = process.title;
+  this.token = token;
+  this.bot_name = bot_name;
 }
 
 // Public Methods
@@ -38,16 +35,16 @@ function post_request (slack, text, callback) {
     url: 'https://slack.com/api/chat.postMessage',
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
-      'Authorization': `Bearer ${process.env.SLACK_TOKEN}`
+      'Authorization': `Bearer ${slack.token}`
     },
     form: {
       channel: slack.channel,
       text: text,
-      username: `${config.live ? 'prod' : 'dev'}-${slack.host}`
+      username: `${slack.live ? 'prod' : 'dev'}-${slack.bot_name}`
     }
   };
 
-  if (!config.live) {
+  if (!slack.live) {
     R5.out.log(`Slack message not sent (on DEV): ${text}`);
     return callback(false, {}, {});
   }
