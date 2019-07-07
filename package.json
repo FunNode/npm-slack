@@ -1,7 +1,7 @@
 {
   "name": "@funnode/slack",
-  "version": "1.1.0",
-  "description": "",
+  "version": "1.2.0",
+  "description": "A slack wrapper used by funnode repositories",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,10 +10,18 @@
     "type": "git",
     "url": "git+https://github.com/FunNode/npm-slack.git"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/FunNode/npm-slack/issues"
+  "author": {
+    "name": "Ravi Patel",
+    "email": "ravi@funnode.com",
+    "url": "https://github.com/RaviPatel"
   },
-  "homepage": "https://github.com/FunNode/npm-slack#readme"
+  "contributors": [
+    { "name": "Malik Kamran Abid", "url": "https://github.com/orgs/FunNode/people/malikkamranabid" }
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "request": "2.83.0"
+  }
 }
