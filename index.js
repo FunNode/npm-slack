@@ -1,13 +1,6 @@
 /* eslint-disable brace-style, camelcase, semi */
-/* global R5 */
 
 module.exports = Slack;
-
-if (!global.R5) {
-  global.R5 = {
-    out: console
-  }
-}
 
 let request = require('request');
 
@@ -15,6 +8,7 @@ function Slack (channel, token, bot_name, live = false) {
   this.channel = channel;
   this.token = token;
   this.bot_name = bot_name;
+  this.live = live;
 }
 
 // Public Methods
@@ -22,7 +16,7 @@ function Slack (channel, token, bot_name, live = false) {
 Slack.prototype = {
   send_message: function (text, callback) {
     post_request(this, text, function (err, res, body) {
-      if (err) { R5.out.error(err); }
+      if (err) { console.error(err); }
       if (callback) { return callback(err); }
     });
   }
@@ -45,7 +39,7 @@ function post_request (slack, text, callback) {
   };
 
   if (!slack.live) {
-    R5.out.log(`Slack message not sent (on DEV): ${text}`);
+    console.log(`Slack message not sent (on DEV): ${text}`);
     return callback(false, {}, {});
   }
 
