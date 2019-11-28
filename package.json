@@ -1,6 +1,6 @@
 {
   "name": "@funnode/slack",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "A slack wrapper used by funnode repositories",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "request": "2.83.0"
+    "request": "2.88.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
