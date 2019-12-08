@@ -1,8 +1,6 @@
-/* eslint-disable brace-style, camelcase, semi */
-
 module.exports = Slack;
 
-let request = require('request');
+const request = require('request-promise-native');
 
 function Slack (channel, token, bot_name, live = false) {
   this.channel = channel;
@@ -14,18 +12,19 @@ function Slack (channel, token, bot_name, live = false) {
 // Public Methods
 
 Slack.prototype = {
-  send_message: function (text, callback) {
-    post_request(this, text, function (err, res, body) {
-      if (err) { console.error(err); }
-      if (callback) { return callback(err); }
-    });
+  send_message: async function (text) {
+    return post_request(this, text)
+      .catch((err) => {
+        console.error(err);
+        throw err;
+      });
   }
 };
 
 // Private Methods
 
-function post_request (slack, text, callback) {
-  let options = {
+async function post_request (slack, text) {
+  const options = {
     url: 'https://slack.com/api/chat.postMessage',
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
@@ -40,10 +39,8 @@ function post_request (slack, text, callback) {
 
   if (!slack.live) {
     console.log(`Slack message not sent (on DEV): ${text}`);
-    return callback(false, {}, {});
+    return;
   }
 
-  request.post(options, function (err, res, body) {
-    callback(err, res, body);
-  });
+  return request.post(options);
 }
