@@ -12,17 +12,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 22
       - run: npm ci
-      - run: npm run test
-      - uses: paambaati/codeclimate-action@v2.3.0
-        env:
-          CC_TEST_REPORTER_ID: ${{secrets.cc_reporter_id}}
+      - run: npm run coverage
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
         with:
-          coverageCommand: npm run coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: coverage/lcov.info
+          flags: npm-slack-tests
+          name: codecov-npm-slack
+          fail_ci_if_error: false
+          verbose: true
   publish-gpr:
     needs: build
     if: github.event_name == 'push'
@@ -31,10 +35,10 @@ jobs:
       packages: write
       contents: read
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 22
           registry-url: https://npm.pkg.github.com/
           scope: '@RaviPatel'
       - run: npm ci
